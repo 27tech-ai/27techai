@@ -1,0 +1,109 @@
+================================================================================
+                    27TechAI - QUICK START GUIDE
+================================================================================
+
+🚀 FOLLOW THESE STEPS TO GET STARTED:
+
+STEP 1: Install Dependencies
+------------------------------
+Open PowerShell/Terminal in the dashboard folder:
+
+cd dashboard
+pip install -r requirements.txt
+
+
+STEP 2: Generate Encryption Key
+------------------------------
+python generate_key.py
+
+📝 COPY the key shown - you'll need it!
+
+
+STEP 3: Add Your API Keys
+------------------------------
+1. Open: encrypt_secrets.py
+2. Replace YOUR_GENERATED_KEY_HERE with your key from Step 2
+3. Fill in your API keys:
+
+secrets = {
+    "GITHUB_USERNAME": "your-username",
+    "GITHUB_REPO": "your-repo",
+    "GITHUB_TOKEN": "ghp_xxxxx",
+    "OPENROUTER_API_KEY": "sk-or-v1-xxxxx",
+    "OPENAI_API_KEY": "sk-proj-xxxxx",
+    ...
+}
+
+
+STEP 4: Encrypt Secrets
+------------------------------
+python encrypt_secrets.py
+
+✅ Creates: secrets.enc (encrypted file)
+
+
+STEP 5: Update Dashboard Key
+------------------------------
+1. Open: dashboard.py
+2. Line 12: Replace YOUR_ENCRYPTION_KEY_HERE with your key
+
+
+STEP 6: Run Dashboard
+------------------------------
+python dashboard.py
+
+🎉 You're ready!
+
+
+================================================================================
+DEPLOY TO GITHUB PAGES
+================================================================================
+
+1. Create a GitHub repository
+2. Push your code:
+
+git init
+git add .
+git commit -m "Initial commit"
+git branch -M main
+git remote add origin https://github.com/USERNAME/REPO.git
+git push -u origin main
+
+3. Go to: Repository → Settings → Pages
+4. Enable GitHub Pages from main branch
+5. Your site: https://USERNAME.github.io/REPO
+
+
+================================================================================
+WHERE TO GET API KEYS
+================================================================================
+
+🔑 OpenRouter (Recommended - 100+ AI models):
+   https://openrouter.ai → Sign up → Get API key
+
+🔑 OpenAI:
+   https://platform.openai.com → Sign up → API keys
+
+🔑 GitHub PAT:
+   GitHub → Settings → Developer settings → Personal access tokens
+
+
+================================================================================
+WHAT YOU CAN DO NOW
+================================================================================
+
+✓ Add scripts manually
+✓ Use AI to generate scripts (Claude/OpenAI)
+✓ Auto-generate batch of scripts (up to 10 at once)
+✓ View analytics
+✓ Check API key status
+✓ Auto-update your GitHub site
+
+
+================================================================================
+NEED HELP?
+================================================================================
+
+Check: SETUP_GUIDE.txt for detailed instructions
+
+================================================================================

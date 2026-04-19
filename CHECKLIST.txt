@@ -1,0 +1,260 @@
+================================================================================
+                    27TechAI - STEP BY STEP CHECKLIST
+================================================================================
+
+📋 FOLLOW THIS CHECKLIST FROM TOP TO BOTTOM:
+
+
+================================================================================
+PHASE 1: GET YOUR API KEYS (15 minutes)
+================================================================================
+
+[ ] 1. Get GitHub Personal Access Token
+       → Go to: GitHub → Settings → Developer Settings
+       → Personal Access Tokens → Tokens (classic)
+       → Generate new token
+       → Select: repo, workflow
+       → Copy the token (ghp_xxxxx)
+
+[ ] 2. Get OpenRouter API Key (Recommended)
+       → Go to: https://openrouter.ai
+       → Sign up (free)
+       → Get API key (sk-or-v1-xxxxx)
+       → Has free credits!
+
+[ ] 3. (Optional) Get OpenAI API Key
+       → Go to: https://platform.openai.com
+       → Sign up
+       → Get API key (sk-proj-xxxxx)
+
+[ ] 4. Get Google AI API Key (Optional)
+       → Go to: https://ai.google.dev
+       → Sign up
+       → Get API key
+
+
+================================================================================
+PHASE 2: SETUP ON YOUR COMPUTER (10 minutes)
+================================================================================
+
+[ ] 1. Open PowerShell
+       → cd C:\Users\Hossi\Desktop\QODER\dashboard
+
+[ ] 2. Install Python packages
+       → pip install -r requirements.txt
+
+[ ] 3. Generate encryption key
+       → python generate_key.py
+       → 📝 COPY the key shown!
+
+[ ] 4. Edit encrypt_secrets.py
+       → Open: dashboard/encrypt_secrets.py
+       → Line 5: Replace YOUR_GENERATED_KEY_HERE
+       → Fill in your API keys:
+         • GITHUB_USERNAME = "your-username"
+         • GITHUB_REPO = "your-repo-name"
+         • GITHUB_TOKEN = "ghp_xxxxx"
+         • OPENROUTER_API_KEY = "sk-or-v1-xxxxx"
+         • (Add other keys if you have them)
+
+[ ] 5. Encrypt your secrets
+       → python encrypt_secrets.py
+       → ✅ Creates: secrets.enc
+
+[ ] 6. Update dashboard.py
+       → Open: dashboard/dashboard.py
+       → Line 12: Replace YOUR_ENCRYPTION_KEY_HERE
+       → Use same key from step 3
+
+[ ] 7. Test dashboard
+       → python dashboard.py
+       → ✅ Should open with 4 tabs
+       → Check ⚙️ Settings tab - API keys should show ✅
+
+
+================================================================================
+PHASE 3: CREATE GITHUB REPOSITORY (5 minutes)
+================================================================================
+
+[ ] 1. Go to GitHub
+       → https://github.com
+       → Click: New Repository
+
+[ ] 2. Create repository
+       → Name: 27TechAI (or any name)
+       → Public
+       → DON'T add README
+       → Create repository
+
+[ ] 3. Copy repository URL
+       → Will look like:
+       → https://github.com/YOUR_USERNAME/YOUR_REPO.git
+
+
+================================================================================
+PHASE 4: UPLOAD TO GITHUB (5 minutes)
+================================================================================
+
+[ ] 1. Open PowerShell in project folder
+       → cd C:\Users\Hossi\Desktop\QODER
+
+[ ] 2. Initialize Git
+       → git init
+
+[ ] 3. Add files
+       → git add .
+       → (secrets.enc automatically blocked!)
+
+[ ] 4. Commit
+       → git commit -m "27TechAI - Initial setup"
+
+[ ] 5. Set branch name
+       → git branch -M main
+
+[ ] 6. Connect to GitHub
+       → git remote add origin https://github.com/YOUR_USERNAME/YOUR_REPO.git
+       → (Replace with YOUR URL)
+
+[ ] 7. Upload!
+       → git push -u origin main
+       → May ask for GitHub login
+       → Use your username and token as password
+
+
+================================================================================
+PHASE 5: ENABLE GITHUB PAGES (2 minutes)
+================================================================================
+
+[ ] 1. Go to your repository on GitHub
+
+[ ] 2. Click: Settings
+
+[ ] 3. Click: Pages (left sidebar)
+
+[ ] 4. Configure:
+       → Source: Deploy from a branch
+       → Branch: main
+       → Folder: / (root)
+       → Save
+
+[ ] 5. Wait 1-2 minutes
+
+[ ] 6. Your site is live!
+       → https://YOUR_USERNAME.github.io/YOUR_REPO
+
+
+================================================================================
+PHASE 6: TEST EVERYTHING (5 minutes)
+================================================================================
+
+[ ] 1. Visit your site
+       → Open browser
+       → Go to: https://YOUR_USERNAME.github.io/YOUR_REPO
+       → ✅ Should see 27TechAI website
+
+[ ] 2. Test dashboard
+       → python dashboard.py
+       → Go to 🤖 AI Generator tab
+       → Enter: "Test script"
+       → Count: 1
+       → Click: Auto-Generate Batch
+
+[ ] 3. Check GitHub
+       → Go to your repository
+       → Open data.json
+       → ✅ Should see new script added
+
+[ ] 4. Check website
+       → Refresh your site
+       → ✅ New script should appear!
+
+
+================================================================================
+✅ YOU'RE DONE!
+================================================================================
+
+
+================================================================================
+📊 WHAT GOES WHERE (Quick Reference):
+================================================================================
+
+UPLOAD TO GITHUB (Public):
+✅ index.html
+✅ data.json
+✅ .github/workflows/deploy.yml
+✅ README.txt, guides
+✅ .gitignore
+
+KEEP ON COMPUTER (Private):
+🔐 dashboard/ (entire folder)
+🔐 secrets.enc
+🔐 All API keys
+
+
+================================================================================
+🔄 DAILY WORKFLOW (After Setup):
+================================================================================
+
+To add new scripts:
+1. python dashboard.py
+2. Use AI to generate
+3. Dashboard auto-updates GitHub
+4. Website updates automatically!
+
+That's it! 🎉
+
+
+================================================================================
+❓ TROUBLESHOOTING:
+================================================================================
+
+Problem: "git: command not found"
+→ Install Git: https://git-scm.com/download/win
+
+Problem: "Permission denied" on push
+→ Use token as password, not GitHub password
+
+Problem: Site not updating
+→ Wait 2 minutes, then hard refresh (Ctrl+F5)
+
+Problem: Dashboard won't open
+→ pip install -r requirements.txt
+
+Problem: API errors
+→ Check API keys are correct in encrypt_secrets.py
+
+
+================================================================================
+📚 ADDITIONAL GUIDES:
+================================================================================
+
+📖 QUICK_START.txt       → Fast setup steps
+📖 SETUP_GUIDE.txt       → Detailed instructions
+📖 WHAT_GOES_WHERE.txt   → What to upload vs keep
+📖 VISUAL_GUIDE.txt      → Diagrams and flow
+
+
+================================================================================
+NEED HELP?
+================================================================================
+
+1. Check the guides above
+2. Review error messages
+3. Verify API keys are valid
+4. Make sure .gitignore is working
+
+
+================================================================================
+🎉 CONGRATULATIONS!
+================================================================================
+
+You now have:
+✅ AI-powered script platform
+✅ Auto-deploying website
+✅ Encrypted API keys
+✅ Batch content generation
+✅ Professional dashboard
+
+All set! Start creating amazing scripts! 🚀
+
+================================================================================

@@ -1,0 +1,380 @@
+================================================================================
+                    27TechAI - COMPLETE SETUP GUIDE
+              AI-Powered Scripts Platform | GitHub Pages
+================================================================================
+
+📋 TABLE OF CONTENTS
+================================================================================
+1. Project Overview
+2. Prerequisites
+3. Step-by-Step Setup
+4. Encrypting Your API Keys
+5. GitHub Pages Deployment
+6. Using the Enhanced Dashboard
+7. AI Auto-Posting Features
+8. Troubleshooting
+
+================================================================================
+1. PROJECT OVERVIEW
+================================================================================
+
+27TechAI is an AI-powered scripts and automation tools platform with:
+- Beautiful frontend (index.html) deployed on GitHub Pages
+- Enhanced Python dashboard with multiple AI model support
+- Encrypted API keys management (all keys in one secure file)
+- Auto-content generation using Claude, OpenAI, and more
+- Site analytics and monitoring
+- Discord/Telegram notifications
+
+================================================================================
+2. PREREQUISITES
+================================================================================
+
+✓ Python 3.8 or higher
+✓ GitHub account
+✓ API Keys for AI services (at least one):
+  - OpenRouter (https://openrouter.ai)
+  - OpenAI (https://platform.openai.com)
+  - Anthropic (https://console.anthropic.com)
+  - Google AI (https://ai.google.dev)
+  - HuggingFace (https://huggingface.co)
+✓ GitHub Personal Access Token (PAT)
+
+================================================================================
+3. STEP-BY-STEP SETUP
+================================================================================
+
+STEP 1: Install Python Dependencies
+-------------------------------------
+Open terminal in the dashboard folder and run:
+
+cd dashboard
+pip install -r requirements.txt
+
+This will install:
+- cryptography (for encryption)
+- requests (for API calls)
+- tkinter (usually comes with Python)
+
+
+STEP 2: Generate Encryption Key
+-------------------------------------
+Run the key generator:
+
+python generate_key.py
+
+You'll see output like:
+🔑 Your Encryption Key:
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+
+⚠️ COPY THIS KEY - You'll need it in the next step!
+
+
+STEP 3: Configure Your Secrets
+-------------------------------------
+1. Open: dashboard/encrypt_secrets.py
+2. Replace YOUR_GENERATED_KEY_HERE with your actual key
+3. Fill in ALL your API keys:
+
+secrets = {
+    # GitHub Configuration
+    "GITHUB_USERNAME": "your-username",
+    "GITHUB_REPO": "your-repo-name",
+    "GITHUB_TOKEN": "ghp_xxxxxxxxxxxx",
+    
+    # AI API Keys (add at least one)
+    "OPENROUTER_API_KEY": "sk-or-v1-xxxxx",
+    "OPENAI_API_KEY": "sk-proj-xxxxx",
+    "ANTHROPIC_API_KEY": "sk-ant-xxxxx",
+    "GOOGLE_AI_API_KEY": "xxxxx",
+    "HUGGINGFACE_API_KEY": "hf_xxxxx",
+    
+    # Optional: Notifications
+    "TELEGRAM_BOT_TOKEN": "xxxxx",
+    "DISCORD_WEBHOOK_URL": "https://discord.com/api/webhooks/xxxxx",
+    
+    # Site Configuration
+    "SITE_URL": "https://yourusername.github.io/yourrepo",
+    "ADMIN_PASSWORD": "your-secure-password"
+}
+
+
+STEP 4: Encrypt Your Secrets
+-------------------------------------
+Run the encryption script:
+
+python encrypt_secrets.py
+
+This creates: dashboard/secrets.enc
+✅ This file is encrypted and safe to keep locally
+❌ NEVER upload secrets.enc to GitHub!
+
+
+STEP 5: Update Dashboard with Your Key
+-------------------------------------
+1. Open: dashboard/dashboard.py
+2. Find line 12: KEY = b'YOUR_ENCRYPTION_KEY_HERE'
+3. Replace with your actual encryption key
+
+
+STEP 6: Test the Dashboard
+-------------------------------------
+Run the dashboard:
+
+python dashboard.py
+
+You should see:
+- 📦 Scripts tab
+- 🤖 AI Generator tab
+- 📊 Analytics tab
+- ⚙️ Settings tab (showing API key status)
+
+================================================================================
+4. ENCRYPTING YOUR API KEYS
+================================================================================
+
+Why Encryption?
+- All API keys stored in ONE encrypted file (secrets.enc)
+- Cannot be read without your encryption key
+- Safe backup and storage
+- Multiple keys in one place
+
+Supported Keys:
+✓ GitHub (for auto-updating your site)
+✓ OpenRouter (access to 100+ AI models)
+✓ OpenAI (GPT-3.5, GPT-4)
+✓ Anthropic (Claude)
+✓ Google AI (Gemini)
+✓ HuggingFace (open-source models)
+✓ Discord (notifications)
+✓ Telegram (notifications)
+
+================================================================================
+5. GITHUB PAGES DEPLOYMENT
+================================================================================
+
+OPTION 1: Automatic (Using GitHub Actions)
+--------------------------------------------
+1. Push your code to GitHub:
+
+git init
+git add .
+git commit -m "Initial commit"
+git branch -M main
+git remote add origin https://github.com/yourusername/yourrepo.git
+git push -u origin main
+
+2. The .github/workflows/deploy.yml will automatically deploy
+3. Go to your repo Settings → Pages
+4. Your site will be at: https://yourusername.github.io/yourrepo
+
+
+OPTION 2: Manual Deployment
+--------------------------------------------
+1. Go to your GitHub repository
+2. Settings → Pages
+3. Source: Deploy from a branch
+4. Branch: main / root
+5. Save
+6. Your site will be live in 1-2 minutes
+
+
+Update Your data.json:
+- The dashboard automatically updates data.json on GitHub
+- Changes appear on your site within seconds
+
+================================================================================
+6. USING THE ENHANCED DASHBOARD
+================================================================================
+
+Tab 1: 📦 Scripts Management
+------------------------------
+- View all your scripts in a list
+- Add new scripts manually
+- Delete scripts
+- Quick AI generation (Claude/OpenAI buttons)
+- Auto-fill title and description using AI
+
+
+Tab 2: 🤖 AI Auto-Generator
+------------------------------
+- Generate multiple scripts at once (batch mode)
+- Enter a topic (e.g., "Python automation tools")
+- Set number of scripts (1-10)
+- Click "Auto-Generate Batch"
+- AI creates all scripts and adds them automatically!
+
+Example Topics:
+- "Web scraping tools"
+- "Telegram bot scripts"
+- "Image processing utilities"
+- "File automation scripts"
+
+
+Tab 3: 📊 Analytics
+------------------------------
+- Total number of scripts
+- Your site URL
+- Refresh button to update stats
+- (Future: visitor tracking, popular scripts)
+
+
+Tab 4: ⚙️ Settings
+------------------------------
+- See status of all API keys
+- Green ✅ = Configured
+- Red ❌ = Not set
+- Grid view of all 8 API keys
+
+================================================================================
+7. AI AUTO-POSTING FEATURES
+================================================================================
+
+What Can AI Do Automatically?
+-------------------------------
+1. Generate Script Content
+   - Titles in 3 languages (Arabic/English/French)
+   - Descriptions in 3 languages
+   - Auto-assign images
+   - Set default links
+
+2. Batch Generation
+   - Create up to 10 scripts at once
+   - Just provide a topic
+   - AI does everything
+
+3. Multi-Model Support
+   - Claude (via OpenRouter)
+   - OpenAI GPT-3.5
+   - More models coming soon
+
+4. Notifications
+   - Discord webhook alerts
+   - Telegram bot messages
+   - (Configure in secrets.enc)
+
+
+How to Use Auto-Posting:
+-------------------------------
+1. Go to "🤖 AI Generator" tab
+2. Enter topic: "Python automation"
+3. Set count: 5
+4. Click "🚀 Auto-Generate Batch"
+5. Wait 30-60 seconds
+6. All 5 scripts added automatically!
+7. They appear on your site immediately
+
+================================================================================
+8. TROUBLESHOOTING
+================================================================================
+
+Problem: "secrets.enc not found"
+Solution: Run encrypt_secrets.py first
+
+Problem: "Failed to load secrets"
+Solution: Check your encryption key in dashboard.py line 12
+
+Problem: "GitHub Error: 401"
+Solution: Check your GITHUB_TOKEN is valid
+
+Problem: "AI generation failed"
+Solution: 
+- Check API key is configured
+- Verify internet connection
+- Check API key has credits/balance
+
+Problem: Site not updating
+Solution:
+- Check GitHub Actions ran successfully
+- Wait 1-2 minutes for GitHub Pages cache
+- Hard refresh browser (Ctrl+F5)
+
+Problem: Dashboard won't open
+Solution:
+- Install requirements: pip install -r requirements.txt
+- Check Python version: python --version (need 3.8+)
+- Check tkinter is installed
+
+================================================================================
+SECURITY NOTES
+================================================================================
+
+✅ SAFE TO UPLOAD TO GITHUB:
+- index.html
+- data.json
+- dashboard.py (without your key)
+- .github/workflows/deploy.yml
+- requirements.txt
+
+❌ NEVER UPLOAD TO GITHUB:
+- secrets.enc
+- encrypt_secrets.py (with your keys filled)
+- generate_key.py output
+- Any file with actual API keys
+
+.gitignore already protects these files!
+
+================================================================================
+GETTING API KEYS
+================================================================================
+
+OpenRouter (Recommended - Access to 100+ models):
+1. Go to https://openrouter.ai
+2. Sign up
+3. Get API key from dashboard
+4. Free credits available
+
+OpenAI:
+1. Go to https://platform.openai.com
+2. Create account
+3. Get API key
+4. Free credits for new users
+
+Anthropic (Claude):
+1. Go to https://console.anthropic.com
+2. Create account
+3. Get API key
+4. Free tier available
+
+GitHub PAT:
+1. GitHub → Settings → Developer settings
+2. Personal access tokens → Tokens (classic)
+3. Generate new token
+4. Select scopes: repo, workflow
+
+================================================================================
+QUICK START COMMANDS
+================================================================================
+
+# Setup (one-time)
+cd dashboard
+pip install -r requirements.txt
+python generate_key.py
+# (edit encrypt_secrets.py with your keys)
+python encrypt_secrets.py
+
+# Run Dashboard
+python dashboard.py
+
+# Deploy to GitHub
+git add .
+git commit -m "Update"
+git push
+
+================================================================================
+SUPPORT & UPDATES
+================================================================================
+
+Created by: Lhousin Elhamidy
+Project: 27TechAI - Scripts & Automation Hub
+Year: 2026
+
+For issues or questions:
+- Check this guide
+- Review code comments
+- Verify API keys are valid
+- Check .gitignore is working
+
+================================================================================
+END OF GUIDE
+================================================================================

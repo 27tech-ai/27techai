@@ -1,6 +1,24 @@
 {
   "cards": [
     {
+      "title": "🐍 Python Web Scraper",
+      "desc": "استخراج البيانات من المواقع • Extract data from websites • Extraire des données",
+      "img": "https://picsum.photos/id/0/400/200",
+      "link": "#"
+    },
+    {
+      "title": "📱 Auto-Post Bot",
+      "desc": "نشر تلقائي على السوشيال ميديا • Auto-post on social media • Publication automatique",
+      "img": "https://picsum.photos/id/1/400/200",
+      "link": "#"
+    },
+    {
+      "title": "🎮 eFootball Card Generator",
+      "desc": "توليد بطاقات eFootball • Generate eFootball cards • Générer des cartes eFootball",
+      "img": "https://picsum.photos/id/2/400/200",
+      "link": "#"
+    },
+    {
       "title": "q",
       "desc": "Arabic: تيوكتو ريلز هو أداة برمجية قوية تسمح لك بإنشاء محتوى فيديو جذاب وسهل الاستخدام. سواء كنت مبت",
       "img": "q",

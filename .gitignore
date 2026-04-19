@@ -1,0 +1,35 @@
+# Secret & Encrypted Files
+secrets.enc
+*.key
+.env
+config.py
+secrets.json
+*.enc
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pyc
+
+# Dashboard
+dashboard.log
+*.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Encryption files
+dashboard/secrets.enc
+dashboard/*.key
+
+# API Keys file
+keys.txt
