@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>27TechAI | Scripts & Automation Tools</title>
+    <meta name="description" content="27TechAI - Scripts & Automation Hub. Download Python tools, bots, and automation scripts.">
+    <meta property="og:title" content="27TechAI - Scripts & Automation Hub">
+    <meta property="og:description" content="Download Python tools, bots, and automation scripts.">
+    <meta property="og:type" content="website">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Cairo', sans-serif; }
+        body { background: #0a0a0f; }
+        .card-hover { transition: all 0.3s ease; }
+        .card-hover:hover { transform: translateY(-8px); box-shadow: 0 20px 40px rgba(108, 99, 255, 0.3); }
+        .gradient-text { background: linear-gradient(135deg, #6c63ff, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .glow { box-shadow: 0 0 20px rgba(108, 99, 255, 0.5); }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1a1a2e; }
+        ::-webkit-scrollbar-thumb { background: #6c63ff; border-radius: 4px; }
+        .search-glow:focus { box-shadow: 0 0 15px rgba(168, 85, 247, 0.6); }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
+        .category-badge { font-size: 0.65rem; padding: 2px 8px; border-radius: 9999px; }
+    </style>
+</head>
+<body class="min-h-screen text-white">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-gray-900 via-purple-900 to-gray-900 border-b border-purple-500/30">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 bg-gradient-to-br from-purple-500 to-blue-500 rounded-lg flex items-center justify-center text-2xl font-black glow">27</div>
+                    <div>
+                        <h1 id="siteTitle" class="text-3xl font-black gradient-text">27TechAI</h1>
+                        <p id="siteSubtitle" class="text-sm text-gray-400">Scripts & Automation Hub</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="text-xs text-gray-500">Built by Lhousin Elhamidy</span>
+                    <a href="https://github.com/27tech-ai/27techai" target="_blank" class="px-4 py-2 bg-purple-600 hover:bg-purple-700 rounded-lg text-sm font-semibold transition">GitHub</a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Search & Filter Bar -->
+    <section class="container mx-auto px-4 py-8">
+        <div class="max-w-3xl mx-auto flex flex-col sm:flex-row gap-3">
+            <input 
+                type="text" 
+                id="searchInput" 
+                placeholder="Search scripts... / ابحث عن سكريبت..." 
+                class="flex-1 px-6 py-4 bg-gray-900/80 border border-purple-500/30 rounded-xl text-white placeholder-gray-500 focus:outline-none focus:border-purple-500 search-glow transition text-lg"
+            >
+            <select id="categoryFilter" class="px-4 py-4 bg-gray-900/80 border border-purple-500/30 rounded-xl text-white focus:outline-none focus:border-purple-500">
+                <option value="">All Categories</option>
+            </select>
+        </div>
+    </section>
+
+    <!-- Stats -->
+    <section class="container mx-auto px-4 pb-6">
+        <div class="flex justify-center gap-6 text-sm text-gray-400">
+            <span>Total: <strong id="totalCount" class="text-purple-400">0</strong> scripts</span>
+            <span>Updated: <strong id="lastUpdated" class="text-purple-400">-</strong></span>
+        </div>
+    </section>
+
+    <!-- Cards Grid -->
+    <main class="container mx-auto px-4 pb-16">
+        <div id="cardsContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        </div>
+        <div id="noResults" class="hidden text-center py-16">
+            <p class="text-2xl text-gray-500">No scripts found</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900/50 border-t border-purple-500/20 py-6 text-center text-gray-500 text-sm">
+        <p id="footerText">&copy; 2026 27TechAI &mdash; All rights reserved. Created by Lhousin Elhamidy</p>
+    </footer>
+
+    <script>
+        // Data source - try local data.json first, fallback to GitHub raw
+        const LOCAL_DATA_URL = 'data.json';
+        const GITHUB_RAW_URL = 'https://raw.githubusercontent.com/27tech-ai/27techai/main/website/data.json';
+
+        let allCards = [];
+        let siteConfig = {};
+
+        async function loadData() {
+            let data = null;
+
+            // Try local first
+            try {
+                const res = await fetch(LOCAL_DATA_URL);
+                if (res.ok) data = await res.json();
+            } catch(e) {}
+
+            // Fallback to GitHub
+            if (!data) {
+                try {
+                    const res = await fetch(GITHUB_RAW_URL);
+                    if (res.ok) data = await res.json();
+                } catch(e) {}
+            }
+
+            if (!data) {
+                document.getElementById('cardsContainer').innerHTML = `
+                    <div class="col-span-full text-center py-16">
+                        <p class="text-2xl text-red-400">Failed to load scripts. Check connection.</p>
+                    </div>`;
+                return;
+            }
+
+            // Apply site config
+            siteConfig = data.site || {};
+            if (siteConfig.title) document.getElementById('siteTitle').textContent = siteConfig.title;
+            if (siteConfig.subtitle) document.getElementById('siteSubtitle').textContent = siteConfig.subtitle;
+            if (siteConfig.footerText) document.getElementById('footerText').textContent = siteConfig.footerText;
+
+            // Only show published scripts
+            allCards = (data.cards || []).filter(c => c.status !== 'draft');
+
+            // Build category filter
+            const categories = [...new Set(allCards.map(c => c.category || 'uncategorized'))].filter(Boolean).sort();
+            const select = document.getElementById('categoryFilter');
+            categories.forEach(cat => {
+                const opt = document.createElement('option');
+                opt.value = cat;
+                opt.textContent = cat;
+                select.appendChild(opt);
+            });
+
+            renderCards(allCards);
+            document.getElementById('totalCount').textContent = allCards.length;
+
+            // Find latest update
+            if (allCards.length > 0) {
+                const latest = allCards.reduce((a, b) => (a.updatedAt > b.updatedAt ? a : b));
+                document.getElementById('lastUpdated').textContent = latest.updatedAt || '2026';
+            }
+        }
+
+        function renderCards(cards) {
+            const container = document.getElementById('cardsContainer');
+            const noResults = document.getElementById('noResults');
+
+            if (cards.length === 0) {
+                container.innerHTML = '';
+                noResults.classList.remove('hidden');
+                return;
+            }
+
+            noResults.classList.add('hidden');
+            container.innerHTML = cards.map((card, i) => `
+                <div class="card-hover bg-gray-900/80 border border-purple-500/20 rounded-xl overflow-hidden animate-fade-in" data-category="${card.category || 'uncategorized'}" style="animation-delay: ${i * 0.1}s">
+                    <img src="${card.img || 'https://picsum.photos/id/' + i + '/400/200'}" alt="${card.title}" class="w-full h-48 object-cover" loading="lazy" onerror="this.src='https://picsum.photos/id/${i}/400/200'">
+                    <div class="p-5">
+                        ${card.category ? '<span class="category-badge bg-purple-500/20 text-purple-300 mb-2 inline-block">' + card.category + '</span>' : ''}
+                        <h3 class="text-xl font-bold mb-2 text-white">${card.title}</h3>
+                        <p class="text-gray-400 text-sm mb-4 line-clamp-2">${card.desc}</p>
+                        <a href="${card.link || '#'}" target="_blank" class="block w-full py-3 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700 rounded-lg text-center font-semibold transition transform hover:scale-105">
+                            Get Script &rarr;
+                        </a>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Search & filter
+        document.getElementById('searchInput').addEventListener('input', applyFilters);
+        document.getElementById('categoryFilter').addEventListener('change', applyFilters);
+
+        function applyFilters() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const cat = document.getElementById('categoryFilter').value;
+            const filtered = allCards.filter(card => {
+                const matchText = !query || card.title.toLowerCase().includes(query) || card.desc.toLowerCase().includes(query);
+                const matchCat = !cat || (card.category || 'uncategorized') === cat;
+                return matchText && matchCat;
+            });
+            renderCards(filtered);
+        }
+
+        loadData();
+    </script>
+
+    <!-- Dashboard Tracking (connects to local dashboard) -->
+    <script>
+    (function() {
+        var DASHBOARD_URL = 'http://localhost:5000';
+        function track(event, data) {
+            try {
+                fetch(DASHBOARD_URL + '/api/tracking', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(Object.assign({
+                        event: event,
+                        page: window.location.pathname,
+                        referrer: document.referrer,
+                        user_agent: navigator.userAgent,
+                        device: /Mobi|Android/i.test(navigator.userAgent) ? 'mobile' : 'desktop'
+                    }, data || {}))
+                }).catch(function() {});
+            } catch(e) {}
+        }
+        track('page_view', {});
+        document.addEventListener('click', function(e) {
+            var link = e.target.closest('a');
+            if (link) {
+                var card = link.closest('.card-hover');
+                if (card) {
+                    var titleEl = card.querySelector('h3');
+                    if (titleEl) {
+                        track('script_click', { script_title: titleEl.textContent.trim() });
+                    }
+                }
+            }
+        });
+    })();
+    </script>
+</body>
+</html>

@@ -2,7 +2,6 @@
 secrets.enc
 *.key
 .env
-config.py
 secrets.json
 *.enc
 
@@ -11,11 +10,10 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
-*.pyc
 
-# Dashboard
-dashboard.log
-*.db
+# Dashboard local data
+dashboard/data/
+dashboard/log/
 
 # IDE
 .vscode/
@@ -26,10 +24,6 @@ dashboard.log
 # OS
 .DS_Store
 Thumbs.db
-
-# Encryption files
-dashboard/secrets.enc
-dashboard/*.key
 
 # API Keys file
 keys.txt

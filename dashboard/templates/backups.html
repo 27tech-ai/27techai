@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% block title %}Backups - 27TechAI{% endblock %}
+{% block page_title %}Backup & Recovery{% endblock %}
+
+{% block content %}
+<div class="bg-gray-900/80 border border-purple-500/20 rounded-xl p-6 mb-6">
+    <div class="flex items-center justify-between">
+        <div>
+            <h3 class="text-lg font-bold gradient-text">Data Backups</h3>
+            <p class="text-gray-400 text-sm mt-1">Auto-backup created before every change. Last 20 backups kept.</p>
+        </div>
+        <button onclick="createBackup()" class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold text-white">
+            Create Manual Backup
+        </button>
+    </div>
+</div>
+
+{% if backups %}
+<div class="bg-gray-900/80 border border-purple-500/20 rounded-xl overflow-hidden">
+    <table class="w-full text-sm">
+        <thead>
+            <tr class="border-b border-purple-500/20 text-gray-400">
+                <th class="px-4 py-3 text-right">Backup Date</th>
+                <th class="px-4 py-3 text-right">Filename</th>
+                <th class="px-4 py-3 text-right">Size</th>
+                <th class="px-4 py-3 text-right">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for backup in backups %}
+            <tr class="table-row border-b border-gray-800/50">
+                <td class="px-4 py-3 text-white">{{ backup.date }}</td>
+                <td class="px-4 py-3 text-gray-400 font-mono text-xs">{{ backup.filename }}</td>
+                <td class="px-4 py-3 text-gray-400">{{ (backup.size / 1024)|round(1) }} KB</td>
+                <td class="px-4 py-3">
+                    <button onclick="restoreBackup('{{ backup.filename }}')" class="px-3 py-1 bg-green-600 hover:bg-green-700 rounded text-xs text-white">
+                        Restore
+                    </button>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="bg-gray-900/80 border border-purple-500/20 rounded-xl p-12 text-center">
+    <p class="text-gray-500 text-lg">No backups yet</p>
+    <p class="text-gray-600 text-sm mt-2">Backups are created automatically when you make changes</p>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+async function createBackup() {
+    const res = await apiCall('/api/backups/create', 'POST');
+    if (res.success) {
+        showToast('Backup created!');
+        setTimeout(() => location.reload(), 1000);
+    }
+}
+
+async function restoreBackup(filename) {
+    if (!confirmAction(`Restore from ${filename}? Current data will be backed up first.`)) return;
+    const res = await apiCall(`/api/backups/restore/${filename}`, 'POST');
+    if (res.success) {
+        showToast('Restored successfully!');
+        setTimeout(() => location.reload(), 1000);
+    }
+}
+</script>
+{% endblock %}

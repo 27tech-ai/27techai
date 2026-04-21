@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Activity Log - 27TechAI{% endblock %}
+{% block page_title %}Activity Log{% endblock %}
+
+{% block content %}
+<div class="bg-gray-900/80 border border-purple-500/20 rounded-xl overflow-hidden">
+    {% if logs %}
+    <table class="w-full text-sm">
+        <thead>
+            <tr class="border-b border-purple-500/20 text-gray-400">
+                <th class="px-4 py-3 text-right">Time</th>
+                <th class="px-4 py-3 text-right">Action</th>
+                <th class="px-4 py-3 text-right">Details</th>
+                <th class="px-4 py-3 text-right">User</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for log in logs %}
+            <tr class="table-row border-b border-gray-800/50">
+                <td class="px-4 py-3 text-gray-400 text-xs whitespace-nowrap">{{ log.timestamp }}</td>
+                <td class="px-4 py-3">
+                    {% if 'delete' in log.action %}
+                    <span class="px-2 py-1 bg-red-500/20 text-red-300 rounded text-xs">{{ log.action }}</span>
+                    {% elif 'add' in log.action or 'create' in log.action %}
+                    <span class="px-2 py-1 bg-green-500/20 text-green-300 rounded text-xs">{{ log.action }}</span>
+                    {% elif 'edit' in log.action or 'update' in log.action %}
+                    <span class="px-2 py-1 bg-blue-500/20 text-blue-300 rounded text-xs">{{ log.action }}</span>
+                    {% elif 'login' in log.action %}
+                    <span class="px-2 py-1 bg-purple-500/20 text-purple-300 rounded text-xs">{{ log.action }}</span>
+                    {% else %}
+                    <span class="px-2 py-1 bg-gray-500/20 text-gray-300 rounded text-xs">{{ log.action }}</span>
+                    {% endif %}
+                </td>
+                <td class="px-4 py-3 text-gray-300 text-xs">{{ log.details }}</td>
+                <td class="px-4 py-3 text-gray-500 text-xs">{{ log.user }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+    <div class="text-center py-12">
+        <p class="text-gray-500 text-lg">No activity yet</p>
+        <p class="text-gray-600 text-sm mt-2">Actions will appear here as you use the dashboard</p>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

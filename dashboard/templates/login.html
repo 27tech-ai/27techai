@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}Login - 27TechAI{% endblock %}
+
+{% block extra_head %}
+<style>
+    body { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: #0a0a0f; }
+    .login-box { animation: fadeIn 0.5s ease-out; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="flex items-center justify-center min-h-screen w-full" style="margin-right: 0;">
+    <div class="login-box w-full max-w-md">
+        <div class="bg-gray-900/80 border border-purple-500/30 rounded-2xl p-8 shadow-2xl">
+            <!-- Logo -->
+            <div class="text-center mb-8">
+                <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-blue-500 rounded-xl flex items-center justify-center text-3xl font-black mx-auto mb-4">27</div>
+                <h1 class="text-2xl font-black gradient-text">27TechAI Dashboard</h1>
+                <p class="text-gray-500 text-sm mt-2">Admin Panel</p>
+            </div>
+
+            {% if error %}
+            <div class="bg-red-500/20 border border-red-500/50 text-red-300 px-4 py-3 rounded-lg mb-4 text-sm text-center">
+                {{ error }}
+            </div>
+            {% endif %}
+
+            <form method="POST" action="/login">
+                <div class="mb-4">
+                    <label class="block text-gray-400 text-sm mb-2">Username</label>
+                    <input type="text" name="username" required
+                        class="w-full px-4 py-3 bg-gray-800 border border-purple-500/30 rounded-lg text-white focus:outline-none focus:border-purple-500 transition"
+                        placeholder="Enter username">
+                </div>
+                <div class="mb-6">
+                    <label class="block text-gray-400 text-sm mb-2">Password</label>
+                    <input type="password" name="password" required
+                        class="w-full px-4 py-3 bg-gray-800 border border-purple-500/30 rounded-lg text-white focus:outline-none focus:border-purple-500 transition"
+                        placeholder="Enter password">
+                </div>
+                <button type="submit" class="btn-primary w-full py-3 rounded-lg font-bold text-white transition transform hover:scale-105">
+                    Login
+                </button>
+            </form>
+
+            <p class="text-gray-600 text-xs text-center mt-6">27TechAI - Scripts & Automation Hub</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

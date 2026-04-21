@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}27TechAI Dashboard{% endblock %}</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <style>
+        * { font-family: 'Cairo', sans-serif; }
+        body { background: #0a0a0f; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #1a1a2e; }
+        ::-webkit-scrollbar-thumb { background: #6c63ff; border-radius: 4px; }
+        .gradient-text { background: linear-gradient(135deg, #6c63ff, #a855f7); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .sidebar-link { transition: all 0.2s; }
+        .sidebar-link:hover, .sidebar-link.active { background: rgba(108, 99, 255, 0.2); border-right: 3px solid #6c63ff; }
+        .card-stat { transition: transform 0.2s; }
+        .card-stat:hover { transform: translateY(-4px); }
+        .btn-primary { background: linear-gradient(135deg, #6c63ff, #a855f7); }
+        .btn-primary:hover { background: linear-gradient(135deg, #5a52e0, #9645d4); }
+        .btn-danger { background: #ef4444; }
+        .btn-danger:hover { background: #dc2626; }
+        .btn-success { background: #10b981; }
+        .btn-success:hover { background: #059669; }
+        .table-row:hover { background: rgba(108, 99, 255, 0.1); }
+        .fade-in { animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .toast { animation: slideIn 0.3s ease-out, fadeOut 0.3s ease-in 2.7s; }
+        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+        @keyframes fadeOut { from { opacity: 1; } to { opacity: 0; } }
+    </style>
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="min-h-screen text-white">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="w-64 bg-gray-900/80 border-l border-purple-500/20 flex flex-col fixed h-full z-30">
+            <!-- Logo -->
+            <div class="p-5 border-b border-purple-500/20">
+                <div class="flex items-center gap-3">
+                    <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-blue-500 rounded-lg flex items-center justify-center text-lg font-black">27</div>
+                    <div>
+                        <h1 class="text-lg font-black gradient-text">27TechAI</h1>
+                        <p class="text-xs text-gray-500">Dashboard</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Nav -->
+            <nav class="flex-1 py-4">
+                <a href="/" class="sidebar-link flex items-center gap-3 px-5 py-3 text-gray-300 hover:text-white {% if request.path == '/' %}active{% endif %}">
+                    <span class="text-xl">&#x1F3E0;</span>
+                    <span>Dashboard</span>
+                </a>
+                <a href="/scripts" class="sidebar-link flex items-center gap-3 px-5 py-3 text-gray-300 hover:text-white {% if '/scripts' in request.path %}active{% endif %}">
+                    <span class="text-xl">&#x1F4E6;</span>
+                    <span>Scripts</span>
+                </a>
+                <a href="/analytics" class="sidebar-link flex items-center gap-3 px-5 py-3 text-gray-300 hover:text-white {% if request.path == '/analytics' %}active{% endif %}">
+                    <span class="text-xl">&#x1F4CA;</span>
+                    <span>Analytics</span>
+                </a>
+                <a href="/backups" class="sidebar-link flex items-center gap-3 px-5 py-3 text-gray-300 hover:text-white {% if request.path == '/backups' %}active{% endif %}">
+                    <span class="text-xl">&#x1F4BE;</span>
+                    <span>Backups</span>
+                </a>
+                <a href="/logs" class="sidebar-link flex items-center gap-3 px-5 py-3 text-gray-300 hover:text-white {% if request.path == '/logs' %}active{% endif %}">
+                    <span class="text-xl">&#x1F4CB;</span>
+                    <span>Activity Log</span>
+                </a>
+                <a href="/settings" class="sidebar-link flex items-center gap-3 px-5 py-3 text-gray-300 hover:text-white {% if request.path == '/settings' %}active{% endif %}">
+                    <span class="text-xl">&#x2699;&#xFE0F;</span>
+                    <span>Settings</span>
+                </a>
+            </nav>
+
+            <!-- Footer -->
+            <div class="p-4 border-t border-purple-500/20 space-y-2">
+                <button onclick="sidebarPush()" id="sidebarPushBtn" class="w-full btn-primary px-3 py-2 rounded-lg text-xs font-semibold text-white">
+                    Push to GitHub
+                </button>
+                <div class="flex items-center justify-between">
+                    <span class="text-xs text-gray-500">v1.0</span>
+                    <a href="/logout" class="text-xs text-red-400 hover:text-red-300">Logout</a>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 mr-64">
+            <!-- Top Bar -->
+            <header class="bg-gray-900/50 border-b border-purple-500/20 px-6 py-4 flex items-center justify-between sticky top-0 z-20">
+                <h2 class="text-lg font-bold">{% block page_title %}Dashboard{% endblock %}</h2>
+                <div class="flex items-center gap-4">
+                    <span class="text-sm text-gray-400" id="realtime-badge">
+                        <span class="inline-block w-2 h-2 bg-green-500 rounded-full mr-1"></span> Online
+                    </span>
+                    <a href="/scripts/add" class="btn-primary px-4 py-2 rounded-lg text-sm font-semibold">+ Add Script</a>
+                </div>
+            </header>
+
+            <!-- Page Content -->
+            <div class="p-6 fade-in">
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container" class="fixed top-4 left-4 z-50 flex flex-col gap-2"></div>
+
+    <script>
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            const colors = { success: 'bg-green-600', error: 'bg-red-600', info: 'bg-blue-600' };
+            toast.className = `toast ${colors[type] || colors.info} text-white px-4 py-3 rounded-lg shadow-lg text-sm font-semibold`;
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        async function apiCall(url, method = 'GET', body = null) {
+            const options = { method, headers: { 'Content-Type': 'application/json' } };
+            if (body) options.body = JSON.stringify(body);
+            try {
+                const res = await fetch(url, options);
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Request failed');
+                return data;
+            } catch (err) {
+                showToast(err.message, 'error');
+                throw err;
+            }
+        }
+
+        // Confirm dialog
+        function confirmAction(msg) {
+            return confirm(msg);
+        }
+
+        async function sidebarPush() {
+            const btn = document.getElementById('sidebarPushBtn');
+            btn.textContent = 'Pushing...';
+            btn.disabled = true;
+            try {
+                const res = await apiCall('/api/git/push', 'POST', { message: 'Update from 27TechAI Dashboard' });
+                showToast(res.message, res.success ? 'success' : 'error');
+            } catch(e) {
+                showToast('Push failed', 'error');
+            } finally {
+                btn.textContent = 'Push to GitHub';
+                btn.disabled = false;
+            }
+        }
+    </script>
+
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>
