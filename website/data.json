@@ -49,6 +49,19 @@
       "clicks": 0,
       "createdAt": "2026-01-01",
       "updatedAt": "2026-01-01"
+    },
+    {
+      "id": "b76f9732",
+      "title": "Auto-Push Test",
+      "desc": "Testing auto git push",
+      "img": "https://picsum.photos/id/3/400/200",
+      "link": "#",
+      "category": "test",
+      "tags": [],
+      "status": "published",
+      "clicks": 0,
+      "createdAt": "2026-04-21",
+      "updatedAt": "2026-04-21"
     }
   ],
   "site": {
